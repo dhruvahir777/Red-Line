@@ -1,0 +1,69 @@
+import React from 'react';
+import { Bell, ShoppingCart, ExternalLink } from 'lucide-react';
+import { GlassCard } from '../ui/GlassCard';
+
+export const RightSidebar: React.FC = () => {
+  return (
+    <div className="hidden lg:flex flex-col w-80 h-full py-6 pr-6 pl-2 gap-6">
+      {/* Top Actions */}
+      <div className="flex items-center justify-end gap-4">
+        <button className="p-3 rounded-full bg-nexus-glass hover:bg-white/10 text-white transition-colors relative">
+          <ShoppingCart size={20} />
+        </button>
+        <button className="p-3 rounded-full bg-nexus-glass hover:bg-white/10 text-white transition-colors relative">
+          <Bell size={20} />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-nexus-accent rounded-full animate-pulse"></span>
+        </button>
+        <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-nexus-glassBorder">
+          <img 
+            src="https://picsum.photos/200" 
+            alt="Profile" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
+      {/* Advertisement Section - Fills the empty space */}
+      <div className="flex-1 w-full relative rounded-[2rem] overflow-hidden border border-nexus-glassBorder bg-[#0f0505] group cursor-pointer">
+         {/* Ad Image */}
+         <img 
+           src="https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=1999&auto=format&fit=crop"
+           alt="Advertisement"
+           className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-50"
+         />
+         
+         {/* Gradient Overlay */}
+         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-nexus-bg" />
+         
+         {/* Sponsored Badge */}
+         <div className="absolute top-3 right-3 px-2 py-1 bg-black/40 backdrop-blur-sm rounded text-[10px] font-bold text-white/70 border border-white/10">
+             SPONSORED
+         </div>
+
+         {/* Ad Content */}
+         <div className="absolute bottom-0 left-0 right-0 p-6 w-full">
+            <h4 className="text-2xl font-bold text-white leading-tight mb-2">Neon Gear<br/>Collection</h4>
+            <p className="text-nexus-muted text-xs mb-4">Upgrade your battlestation with the latest cyberpunk aesthetics.</p>
+            <button className="w-full py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg">
+               Shop Now <ExternalLink size={14} />
+            </button>
+         </div>
+      </div>
+
+      {/* Quick Chat / Group Area */}
+      <GlassCard className="p-4 mt-auto !rounded-[1.5rem]">
+        <div className="flex items-center gap-3 mb-3">
+            <div className="flex -space-x-2 overflow-hidden">
+                <img className="inline-block h-8 w-8 rounded-full ring-2 ring-nexus-card" src="https://picsum.photos/100?1" alt=""/>
+                <img className="inline-block h-8 w-8 rounded-full ring-2 ring-nexus-card" src="https://picsum.photos/100?2" alt=""/>
+                <img className="inline-block h-8 w-8 rounded-full ring-2 ring-nexus-card" src="https://picsum.photos/100?3" alt=""/>
+            </div>
+            <span className="text-sm font-medium text-nexus-muted">+4 online</span>
+        </div>
+        <button className="w-full py-3 bg-nexus-accent rounded-xl text-white font-semibold shadow-glow hover:opacity-90 transition-opacity">
+          Start Party
+        </button>
+      </GlassCard>
+    </div>
+  );
+};

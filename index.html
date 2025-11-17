@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
+    <title>Nexus Gaming Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+            },
+            colors: {
+              nexus: {
+                bg: '#230F12', // Deep reddish brown background
+                card: '#3A1A20', // Lighter panel
+                accent: '#FF4C29', // Bright orange/red accent
+                glass: 'rgba(255, 255, 255, 0.05)',
+                glassBorder: 'rgba(255, 255, 255, 0.1)',
+                text: '#F2EBE9',
+                muted: '#9E8589'
+              }
+            },
+            boxShadow: {
+              'glow': '0 0 20px rgba(255, 76, 41, 0.3)',
+              'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #230F12;
+        color: #F2EBE9;
+        overscroll-behavior-y: none; /* Prevent bounce effect in webview */
+      }
+      /* Custom Scrollbar for Webkit */
+      ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #5C2E36;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #FF4C29;
+      }
+      /* Hide scrollbar utilities */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.553.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.4.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
