@@ -121,14 +121,11 @@ export const FunFly: React.FC<FunFlyProps> = ({ onExit }) => {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
     
-    // Mobile touch prevention for scrolling
-    const preventDefault = (e: TouchEvent) => e.preventDefault();
-    document.addEventListener('touchstart', preventDefault, { passive: false });
-
+    // Removed global touch preventDefault as it breaks UI
+    
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
-      document.removeEventListener('touchstart', preventDefault);
     };
   }, []);
 
@@ -406,14 +403,14 @@ export const FunFly: React.FC<FunFlyProps> = ({ onExit }) => {
 
   return (
     <div 
-      className="fixed inset-0 z-[200] bg-[#230F12] flex flex-col select-none"
+      className="fixed inset-0 z-[200] bg-[#230F12] flex flex-col select-none touch-none"
       onMouseDown={handleStartPress}
       onMouseUp={handleEndPress}
       onMouseLeave={handleEndPress}
       onTouchStart={handleStartPress}
       onTouchEnd={handleEndPress}
     >
-      <canvas ref={canvasRef} className="block w-full h-full touch-none" />
+      <canvas ref={canvasRef} className="block w-full h-full" />
       
       {/* UI Overlay */}
       <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6">
@@ -425,16 +422,18 @@ export const FunFly: React.FC<FunFlyProps> = ({ onExit }) => {
                     <span className="text-3xl font-bold text-white font-mono leading-none">{score}</span>
                 </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 pointer-events-auto">
                  <button 
                     onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} 
-                    className="pointer-events-auto p-3 rounded-full bg-black/20 text-white hover:bg-white/10 transition-colors border border-white/10 backdrop-blur-md"
+                    onTouchStart={(e) => e.stopPropagation()}
+                    className="p-3 rounded-full bg-black/20 text-white hover:bg-white/10 transition-colors border border-white/10 backdrop-blur-md"
                 >
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                 </button>
                 <button 
                     onClick={(e) => { e.stopPropagation(); onExit(); }} 
-                    className="pointer-events-auto p-3 rounded-full bg-black/20 text-white hover:bg-nexus-accent transition-colors border border-white/10 backdrop-blur-md"
+                    onTouchStart={(e) => e.stopPropagation()}
+                    className="p-3 rounded-full bg-black/20 text-white hover:bg-nexus-accent transition-colors border border-white/10 backdrop-blur-md"
                 >
                     <X size={20} />
                 </button>
@@ -482,6 +481,7 @@ export const FunFly: React.FC<FunFlyProps> = ({ onExit }) => {
 
                      <button 
                         onClick={(e) => { e.stopPropagation(); startCountdown(); }}
+                        onTouchStart={(e) => e.stopPropagation()}
                         className="w-full py-4 bg-gradient-to-r from-nexus-accent to-[#FF2E00] text-white font-bold rounded-xl shadow-glow flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95"
                      >
                          {gameState === 'START' ? <Play size={24} fill="currentColor" /> : <RotateCcw size={24} />}

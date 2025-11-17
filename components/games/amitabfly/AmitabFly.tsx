@@ -122,12 +122,14 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space' || e.code === 'ArrowUp') handleJump();
     };
+    
     window.addEventListener('keydown', handleKeyDown);
-    const preventDefault = (e: TouchEvent) => e.preventDefault();
-    document.addEventListener('touchstart', preventDefault, { passive: false });
+    
+    // Removed global touch preventDefault as it breaks UI buttons on mobile
+    // Instead we use touch-none CSS on the container
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('touchstart', preventDefault);
     };
   }, [gameState]);
 
@@ -303,7 +305,7 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
 
   return (
     <div 
-        className="fixed inset-0 z-[200] bg-black"
+        className="fixed inset-0 z-[200] bg-black touch-none"
         onMouseDown={handleJump}
         onTouchStart={handleJump}
     >
@@ -312,10 +314,18 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
       {/* UI Layer */}
       <div className="absolute inset-0 pointer-events-none flex flex-col p-6">
          <div className="flex justify-end gap-4 pointer-events-auto">
-            <button onClick={() => setIsMuted(!isMuted)} className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20">
+            <button 
+              onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} 
+              onTouchStart={(e) => e.stopPropagation()}
+              className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 z-50"
+            >
                 {isMuted ? <VolumeX /> : <Volume2 />}
             </button>
-            <button onClick={onExit} className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 hover:bg-red-500/50">
+            <button 
+              onClick={(e) => { e.stopPropagation(); onExit(); }} 
+              onTouchStart={(e) => e.stopPropagation()}
+              className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 hover:bg-red-500/50 z-50"
+            >
                 <X />
             </button>
          </div>
@@ -323,7 +333,7 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
          {/* Start / Game Over Screen */}
          {(gameState === 'START' || gameState === 'GAME_OVER') && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="pointer-events-auto bg-black/60 backdrop-blur-xl border border-white/10 p-10 rounded-3xl text-center max-w-md w-full shadow-2xl">
+                <div className="pointer-events-auto bg-black/60 backdrop-blur-xl border border-white/10 p-10 rounded-3xl text-center max-w-md w-full shadow-2xl z-50">
                     <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-2">
                         AMITABH FLY
                     </h1>
@@ -339,7 +349,8 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
                     {gameState === 'START' && <p className="text-gray-300 mb-8">Tap to Fly! Avoid the Golden Pillars.</p>}
 
                     <button 
-                        onClick={startCountdown}
+                        onClick={(e) => { e.stopPropagation(); startCountdown(); }}
+                        onTouchStart={(e) => e.stopPropagation()}
                         className="w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded-xl text-xl flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95"
                     >
                         {gameState === 'START' ? <Play fill="black" /> : <RotateCcw />}
