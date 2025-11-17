@@ -21,8 +21,6 @@ export const SIDEBAR_ITEMS = [
   { id: 'library', icon: <Gamepad2 size={24} />, label: 'Library' },
   { id: 'store', icon: <ShoppingBag size={24} />, label: 'Store' },
   { id: 'friends', icon: <Users size={24} />, label: 'Community' },
-  { id: 'messages', icon: <MessageSquare size={24} />, label: 'Messages' },
-  { id: 'gifts', icon: <Gift size={24} />, label: 'Gifts' },
   { id: 'settings', icon: <Settings size={24} />, label: 'Settings' },
 ];
 
@@ -51,18 +49,17 @@ export const HUB_GAMES: PlayableGame[] = [
       accent: '#FFFFFF'
     }
   }
-  // Future games will be added here...
 ];
 
 export const FEATURED_GAME: Game = {
-  id: 'val-001',
-  title: 'Valorant',
-  description: 'Valorant is a multiplayer computer game developed and published by Riot Games. Valorant is Riot Games\' first first-person shooter game.',
-  imageUrl: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=2665&auto=format&fit=crop', 
-  rating: 4.8,
+  id: 'rl-galaxy-001',
+  title: 'Redline Galaxy',
+  description: 'Welcome to the ultimate gaming ecosystem built by Dhruv Studios. Experience next-gen cloud gaming, connect with millions of players, and dominate the leaderboards in a world designed for champions.',
+  imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', 
+  rating: 5.0,
   reviews: 53,
-  category: 'FPS Shooter',
-  platform: ['steam', 'epic'],
+  category: 'Cloud Ecosystem',
+  platform: ['steam', 'epic', 'ps'],
   isPopular: true
 };
 
@@ -70,7 +67,7 @@ export const NEW_GAMES: Game[] = [
   {
     id: 'new-001',
     title: 'Cyberpunk 2077',
-    description: 'An open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification.',
+    description: 'An open-world, action-adventure story set in Night City.',
     imageUrl: 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=2578&auto=format&fit=crop',
     rating: 4.5,
     reviews: 12000,
@@ -81,7 +78,7 @@ export const NEW_GAMES: Game[] = [
   {
     id: 'new-002',
     title: 'Elden Ring',
-    description: 'Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.',
+    description: 'Rise, Tarnished, and be guided by grace.',
     imageUrl: 'https://images.unsplash.com/photo-1644252589631-3d4f008b2433?q=80&w=2070&auto=format&fit=crop',
     rating: 4.9,
     reviews: 25000,
@@ -116,4 +113,12 @@ export const STATS_DATA: StatData[] = [
   { name: 'Dota 2', value: 2340, fill: '#FF4C29' },
   { name: 'LoL', value: 5420, fill: '#FFF0E6' },
   { name: 'CS:GO', value: 4580, fill: '#7C4DFF' },
+];
+
+export const LEADERBOARD_DATA = [
+  { id: 1, name: 'Dhruv_Pro', score: 9850, avatar: 'https://picsum.photos/100/100?random=10' },
+  { id: 2, name: 'NinjaX', score: 8400, avatar: 'https://picsum.photos/100/100?random=11' },
+  { id: 3, name: 'SkyWalker', score: 7230, avatar: 'https://picsum.photos/100/100?random=12' },
+  { id: 4, name: 'GamerGirl', score: 6900, avatar: 'https://picsum.photos/100/100?random=13' },
+  { id: 5, name: 'NoobMaster', score: 5500, avatar: 'https://picsum.photos/100/100?random=14' },
 ];

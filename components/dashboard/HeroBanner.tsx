@@ -11,13 +11,22 @@ const CHARACTER_IMAGES = [
 export const HeroBanner: React.FC = () => {
   const game = FEATURED_GAME;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [reviews, setReviews] = useState(game.reviews);
+  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % CHARACTER_IMAGES.length);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleReviewClick = () => {
+    if (!hasLiked) {
+      setReviews(prev => prev + 1);
+      setHasLiked(true);
+    }
+  };
 
   return (
     <GlassCard className="col-span-12 p-0 min-h-[280px] lg:h-[400px] group !rounded-[2rem] md:!rounded-[2.5rem] overflow-hidden relative">
@@ -29,7 +38,7 @@ export const HeroBanner: React.FC = () => {
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-50"
         />
         {/* Gradient to darken background for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-nexus-bg via-nexus-bg/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-nexus-bg via-nexus-bg/90 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-nexus-bg/80 via-transparent to-transparent" />
       </div>
 
@@ -54,13 +63,10 @@ export const HeroBanner: React.FC = () => {
       <div className="relative z-10 h-full flex flex-col justify-center p-6 md:p-12 max-w-lg">
         <div className="flex gap-2 mb-2 md:mb-4">
           <span className="px-2 md:px-3 py-1 rounded-full bg-[#FFF0E6] text-nexus-bg text-[10px] md:text-xs font-bold flex items-center gap-1 shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-             🔥 Popular
+             🔥 Hot
           </span>
           <span className="px-2 md:px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] md:text-xs font-medium border border-white/10">
-            Steam
-          </span>
-          <span className="px-2 md:px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] md:text-xs font-medium border border-white/10">
-            Epic
+            Dhruv Studios
           </span>
         </div>
 
@@ -68,7 +74,7 @@ export const HeroBanner: React.FC = () => {
           {game.title}
         </h2>
         
-        <p className="text-nexus-muted mb-6 md:mb-8 line-clamp-2 md:line-clamp-3 text-sm md:text-lg leading-relaxed drop-shadow-md max-w-[80%] md:max-w-full">
+        <p className="text-nexus-muted mb-6 md:mb-8 line-clamp-3 md:line-clamp-4 text-sm md:text-lg leading-relaxed drop-shadow-md max-w-[80%] md:max-w-full">
           {game.description}
         </p>
 
@@ -79,9 +85,16 @@ export const HeroBanner: React.FC = () => {
              ))}
           </div>
           
-          <button className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-md border border-white/10 shadow-glass text-sm md:text-base">
-            <ThumbsUp size={16} />
-            <span className="font-semibold">+53 Reviews</span>
+          <button 
+            onClick={handleReviewClick}
+            className={`flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 backdrop-blur-md border shadow-glass text-sm md:text-base
+              ${hasLiked 
+                ? 'bg-nexus-accent text-white border-nexus-accent' 
+                : 'bg-white/10 hover:bg-white/20 border-white/10 text-white'}
+            `}
+          >
+            <ThumbsUp size={16} className={hasLiked ? 'fill-current' : ''} />
+            <span className="font-semibold">+{reviews} Reviews</span>
           </button>
         </div>
       </div>

@@ -14,13 +14,12 @@ export const HubLibrary: React.FC<HubLibraryProps> = ({ onPlayGame }) => {
       <div className="flex justify-between items-center mb-4 md:mb-6">
         <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
           <Gamepad2 className="text-nexus-accent" size={20} />
-          Arcade Hub
+          Quick Play
         </h3>
-        <span className="text-xs md:text-sm text-nexus-muted">Premium Mini-Games</span>
+        <span className="text-xs md:text-sm text-nexus-muted">Jump back in</span>
       </div>
 
-      {/* Adjusted grid to be 2 cols on small screens (landscape mobile) and up to 3 on large */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {HUB_GAMES.map((game) => (
           <GlassCard 
             key={game.id} 
@@ -60,14 +59,6 @@ export const HubLibrary: React.FC<HubLibraryProps> = ({ onPlayGame }) => {
             </div>
           </GlassCard>
         ))}
-
-        {/* Coming Soon Placeholder */}
-        <GlassCard className="flex flex-col items-center justify-center p-4 md:p-6 !rounded-[1.5rem] md:!rounded-[2rem] h-48 md:h-64 border-dashed border-nexus-muted/30">
-            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/5 flex items-center justify-center mb-2 md:mb-4">
-                <Gamepad2 className="text-nexus-muted" size={24} />
-            </div>
-            <span className="text-nexus-muted font-medium text-xs md:text-base text-center">More Games Coming Soon</span>
-        </GlassCard>
       </div>
     </div>
   );
