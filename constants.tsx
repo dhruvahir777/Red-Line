@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Gamepad2, 
@@ -12,6 +13,7 @@ import {
 import { Game, Friend, DownloadItem, StatData, PlayableGame } from './types';
 import { FunFly } from './components/games/funfly/FunFly';
 import { AmitabFly } from './components/games/amitabfly/AmitabFly';
+import { DKFly } from './components/games/dkfly/DKFly';
 
 export const APP_NAME = "RedLine Galaxy";
 export const STUDIO_NAME = "Dhruv Studios";
@@ -28,6 +30,17 @@ export const SIDEBAR_ITEMS = [
 // To add a new game, import it and add an entry here.
 export const HUB_GAMES: PlayableGame[] = [
   {
+    id: 'dkfly',
+    title: 'DK Fly',
+    description: 'Experience the legend. Fly high with pride.',
+    thumbnailUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIfpd1_lg-5VwR3_OmEpJBz70z2w38Zk4umw&s', 
+    component: DKFly,
+    colors: {
+      primary: '#FF9933',
+      accent: '#8B0000'
+    }
+  },
+  {
     id: 'funfly',
     title: 'FunFly',
     description: 'Navigate the neon city. Dodge obstacles. Survive.',
@@ -42,7 +55,7 @@ export const HUB_GAMES: PlayableGame[] = [
     id: 'amitabfly',
     title: 'Amitabh Fly',
     description: 'Realistic flight simulation with high-fidelity graphics.',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?q=80&w=2070&auto=format&fit=crop',
+    thumbnailUrl: 'https://assets.gqindia.com/photos/6708f08f701071b230ad5006/16:9/w_2560%2Cc_limit/Amitabh-bachchan.jpg',
     component: AmitabFly,
     colors: {
       primary: '#D4AF37', // Gold

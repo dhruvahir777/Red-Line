@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 
-interface AmitabFlyProps {
+interface DKFlyProps {
   onExit: () => void;
 }
 
 // --- ASSETS ---
-const CHAR_URL = "https://res.cloudinary.com/du7i7bqna/image/upload/v1763367714/Adobe_Express_-_file_v5et7y.png";
-const BGM_URL = "https://res.cloudinary.com/du7i7bqna/video/upload/v1763367474/retro-arcade-game-music-297305_nae9s4.mp3";
-const GAME_OVER_SFX = "https://res.cloudinary.com/du7i7bqna/video/upload/v1763375766/mkb-aag_3BdJWFa4_vhbrf5.mp3";
-const BG_IMAGE_URL = "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2613&auto=format&fit=crop"; // Realistic City Skyline
+const CHAR_URL = "https://res.cloudinary.com/du7i7bqna/image/upload/v1763376201/devayt_pvksfi.png";
+const BGM_URL = "https://res.cloudinary.com/du7i7bqna/video/upload/v1763379845/kadu-makrani-rahdo_PZP40r1n_wzcrii.mp3";
+const GAME_OVER_SFX = "https://res.cloudinary.com/du7i7bqna/video/upload/v1763379854/devayat-khavad-dialogue_A7kWbrDL_yjyko2.mp3";
+// A dramatic sunset/royal background
+const BG_IMAGE_URL = "https://images.unsplash.com/photo-1532979494617-42f869a1919e?q=80&w=2670&auto=format&fit=crop";
 
-export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
+export const DKFly: React.FC<DKFlyProps> = ({ onExit }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   // Game States
@@ -32,11 +33,11 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
   const bgLoadedRef = useRef(false);
 
   // Physics Constants
-  const GRAVITY = 0.25;
-  const JUMP = -6;
-  const SPEED = 3;
-  const SPAWN_RATE = 120;
-  const PIPE_GAP = 200;
+  const GRAVITY = 0.3;
+  const JUMP = -7;
+  const SPEED = 3.5;
+  const SPAWN_RATE = 110;
+  const PIPE_GAP = 220;
 
   // Mutable Game State
   const physicsRef = useRef({
@@ -51,7 +52,7 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
 
   // --- INITIALIZATION ---
   useEffect(() => {
-    // Preload Images
+    // Preload Images safely
     const charImg = new Image();
     charImg.src = CHAR_URL;
     charImg.onload = () => { charLoadedRef.current = true; };
@@ -65,7 +66,7 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
     // Setup Audio
     bgmRef.current = new Audio(BGM_URL);
     bgmRef.current.loop = true;
-    bgmRef.current.volume = 0.5;
+    bgmRef.current.volume = 0.6;
 
     sfxRef.current = new Audio(GAME_OVER_SFX);
     sfxRef.current.volume = 1.0;
@@ -86,6 +87,9 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
         bgmRef.current.play().catch(() => {});
       } else {
         bgmRef.current.pause();
+        if (gameState === 'START') {
+             bgmRef.current.currentTime = 0;
+        }
       }
     }
   }, [gameState, isMuted]);
@@ -130,10 +134,6 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
     };
     
     window.addEventListener('keydown', handleKeyDown);
-    
-    // Removed global touch preventDefault as it breaks UI buttons on mobile
-    // Instead we use touch-none CSS on the container
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -158,13 +158,13 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
       // --- UPDATE ---
       if (gameState === 'PLAYING') {
         frameRef.current++;
-        bgOffsetRef.current += 0.5; // Slow parallax
+        bgOffsetRef.current += 0.5; // Parallax speed
 
         // Physics
         physicsRef.current.velocity += GRAVITY;
         physicsRef.current.y += physicsRef.current.velocity;
         
-        // Rotation (Tilt up when jumping, down when falling)
+        // Rotation
         physicsRef.current.rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (physicsRef.current.velocity * 0.1)));
 
         // Pipes
@@ -179,7 +179,10 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
 
         // Collision
         if (checkCollision(canvas.height)) {
-            if (!isMuted && sfxRef.current) sfxRef.current.play().catch(()=>{});
+            if (!isMuted && sfxRef.current) {
+                sfxRef.current.currentTime = 0;
+                sfxRef.current.play().catch(()=>{});
+            }
             setGameState('GAME_OVER');
             if (scoreRef.current > highScore) setHighScore(scoreRef.current);
         }
@@ -195,43 +198,54 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
       }
 
       // --- DRAW ---
-      // 1. Realistic Background
+      
+      // 1. Background (Desi Sunset Theme)
       if (bgImgRef.current && bgLoadedRef.current) {
-          // Parallax scrolling
           const bgW = canvas.width;
           const bgH = canvas.height;
-          const offset = (bgOffsetRef.current * 2) % bgW;
+          const offset = (bgOffsetRef.current * 1) % bgW;
           
+          // Draw slightly tinted image
           ctx.drawImage(bgImgRef.current, -offset, 0, bgW, bgH);
           ctx.drawImage(bgImgRef.current, bgW - offset, 0, bgW, bgH);
           
-          // Dark Overlay for contrast
-          ctx.fillStyle = 'rgba(0,0,0,0.3)';
+          // Saffron Tint Overlay
+          ctx.fillStyle = 'rgba(255, 153, 51, 0.2)'; // Saffron tint
           ctx.fillRect(0,0, canvas.width, canvas.height);
       } else {
-          ctx.fillStyle = '#1a1a1a';
+          // Fallback Gradient
+          const grad = ctx.createLinearGradient(0,0,0,canvas.height);
+          grad.addColorStop(0, '#ff9933'); // Saffron
+          grad.addColorStop(1, '#800000'); // Maroon
+          ctx.fillStyle = grad;
           ctx.fillRect(0,0, canvas.width, canvas.height);
       }
 
-      // 2. Pipes (Realistic Golden Pillars)
+      // 2. Pipes (Royal Pillars)
       pipesRef.current.forEach(p => {
-          // Gradients for metallic 3D look
+          // Royal texture gradient
           const grad = ctx.createLinearGradient(p.x, 0, p.x + 80, 0);
-          grad.addColorStop(0, '#B8860B'); // Dark Gold
-          grad.addColorStop(0.5, '#FFD700'); // Gold
-          grad.addColorStop(1, '#B8860B');
+          grad.addColorStop(0, '#8B0000'); // Dark Red
+          grad.addColorStop(0.3, '#FF4500'); // Orange Red
+          grad.addColorStop(0.5, '#FFD700'); // Gold Highlight
+          grad.addColorStop(0.7, '#FF4500');
+          grad.addColorStop(1, '#8B0000');
 
           ctx.fillStyle = grad;
-          ctx.shadowColor = 'black';
+          ctx.shadowColor = 'rgba(0,0,0,0.5)';
           ctx.shadowBlur = 10;
           
-          // Top
+          // Top Pipe
           ctx.fillRect(p.x, 0, 80, p.topHeight);
-          // Bottom
+          // Bottom Pipe
           ctx.fillRect(p.x, p.topHeight + PIPE_GAP, 80, canvas.height - (p.topHeight + PIPE_GAP));
           
-          // Borders
-          ctx.strokeStyle = '#FFFACD';
+          // Decorative Borders (Gold)
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(p.x, p.topHeight - 20, 80, 20); // Top Cap
+          ctx.fillRect(p.x, p.topHeight + PIPE_GAP, 80, 20); // Bottom Cap
+          
+          ctx.strokeStyle = '#FFD700'; // Gold outline
           ctx.lineWidth = 2;
           ctx.strokeRect(p.x, 0, 80, p.topHeight);
           ctx.strokeRect(p.x, p.topHeight + PIPE_GAP, 80, canvas.height);
@@ -239,7 +253,7 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
           ctx.shadowBlur = 0;
       });
 
-      // 3. Character (Amitabh)
+      // 3. Character (DK)
       const charX = 100;
       const charY = physicsRef.current.y;
       
@@ -251,35 +265,38 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
       }
       
       if (charImgRef.current && charLoadedRef.current) {
-          // Draw shadow
-          ctx.shadowColor = 'rgba(0,0,0,0.5)';
-          ctx.shadowBlur = 15;
-          const size = 80; // Character Size
+          // Glow effect
+          ctx.shadowColor = '#FFD700';
+          ctx.shadowBlur = 20;
+          const size = 90; 
           ctx.drawImage(charImgRef.current, -size/2, -size/2, size, size);
       } else {
-          // Fallback
-          ctx.fillStyle = 'red';
-          ctx.fillRect(-20, -20, 40, 40);
+          ctx.fillStyle = 'orange';
+          ctx.beginPath();
+          ctx.arc(0,0, 30, 0, Math.PI*2);
+          ctx.fill();
       }
       ctx.restore();
 
-      // 4. HUD
+      // 4. HUD & Effects
       if (gameState === 'COUNTDOWN') {
-          ctx.fillStyle = 'rgba(0,0,0,0.7)';
+          ctx.fillStyle = 'rgba(0,0,0,0.6)';
           ctx.fillRect(0,0, canvas.width, canvas.height);
-          ctx.fillStyle = '#FFF';
-          ctx.font = 'bold 100px sans-serif';
+          ctx.fillStyle = '#FF9933'; // Saffron
+          ctx.font = 'bold 120px serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
+          ctx.shadowColor = 'black';
+          ctx.shadowBlur = 10;
           ctx.fillText(countDown.toString(), canvas.width/2, canvas.height/2);
       }
       
       if (gameState === 'PLAYING') {
           ctx.fillStyle = '#FFF';
-          ctx.font = 'bold 60px sans-serif';
+          ctx.font = 'bold 60px serif';
           ctx.textAlign = 'center';
-          ctx.shadowColor = 'black';
-          ctx.shadowBlur = 4;
+          ctx.shadowColor = '#FF9933';
+          ctx.shadowBlur = 10;
           ctx.fillText(scoreRef.current.toString(), canvas.width/2, 100);
       }
 
@@ -291,16 +308,14 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
 
   const checkCollision = (h: number) => {
       const y = physicsRef.current.y;
-      const size = 50; // Hitbox approximation
+      const size = 50; // Hitbox
       
       // Ground/Ceiling
       if (y - size/2 < 0 || y + size/2 > h) return true;
 
       // Pipes
       for (const p of pipesRef.current) {
-          // X overlap
           if (100 + size/2 > p.x && 100 - size/2 < p.x + 80) {
-              // Y overlap (Gap check)
               if (y - size/2 < p.topHeight || y + size/2 > p.topHeight + PIPE_GAP) {
                   return true;
               }
@@ -323,43 +338,43 @@ export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
             <button 
               onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} 
               onTouchStart={(e) => e.stopPropagation()}
-              className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 z-50"
+              className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 z-50 hover:bg-[#FF9933]"
             >
                 {isMuted ? <VolumeX /> : <Volume2 />}
             </button>
             <button 
               onClick={(e) => { e.stopPropagation(); onExit(); }} 
               onTouchStart={(e) => e.stopPropagation()}
-              className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 hover:bg-red-500/50 z-50"
+              className="p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20 hover:bg-red-600 z-50"
             >
                 <X />
             </button>
          </div>
 
-         {/* Start / Game Over Screen */}
+         {/* Menu Screens */}
          {(gameState === 'START' || gameState === 'GAME_OVER') && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="pointer-events-auto bg-black/60 backdrop-blur-xl border border-white/10 p-10 rounded-3xl text-center max-w-md w-full shadow-2xl z-50">
-                    <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-2">
-                        AMITABH FLY
+                <div className="pointer-events-auto bg-gradient-to-br from-[#230F12]/90 to-[#5C2E36]/90 backdrop-blur-xl border-2 border-[#FF9933] p-10 rounded-3xl text-center max-w-md w-full shadow-[0_0_50px_rgba(255,153,51,0.3)] z-50">
+                    <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FF9933] via-[#FFD700] to-[#FF9933] mb-2 drop-shadow-sm" style={{ fontFamily: 'serif' }}>
+                        DK FLY
                     </h1>
                     
                     {gameState === 'GAME_OVER' && (
-                        <div className="my-6">
-                            <p className="text-gray-300 text-sm uppercase tracking-widest">Score</p>
-                            <p className="text-6xl font-bold text-white">{score}</p>
-                            <p className="text-yellow-500 text-sm mt-2">Best: {highScore}</p>
+                        <div className="my-6 animate-in zoom-in duration-300">
+                            <p className="text-[#FFD700] text-sm uppercase tracking-widest font-bold">Total Score</p>
+                            <p className="text-7xl font-black text-white drop-shadow-[0_0_10px_rgba(255,76,41,0.8)]">{score}</p>
+                            <p className="text-[#FF9933] text-sm mt-2 font-bold">Highest: {highScore}</p>
                         </div>
                     )}
                     
-                    {gameState === 'START' && <p className="text-gray-300 mb-8">Tap to Fly! Avoid the Golden Pillars.</p>}
+                    {gameState === 'START' && <p className="text-[#FFD700] mb-8 text-lg font-medium">Show your courage. Rule the skies.</p>}
 
                     <button 
                         onClick={(e) => { e.stopPropagation(); startCountdown(); }}
                         onTouchStart={(e) => e.stopPropagation()}
-                        className="w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded-xl text-xl flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95"
+                        className="w-full py-4 bg-gradient-to-r from-[#FF9933] to-[#FF4500] text-white font-black rounded-xl text-xl flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-[0_0_20px_rgba(255,153,51,0.6)]"
                     >
-                        {gameState === 'START' ? <Play fill="black" /> : <RotateCcw />}
+                        {gameState === 'START' ? <Play fill="white" /> : <RotateCcw />}
                         {gameState === 'START' ? 'START GAME' : 'TRY AGAIN'}
                     </button>
                 </div>
