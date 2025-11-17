@@ -8,7 +8,7 @@ interface AmitabFlyProps {
 // --- ASSETS ---
 const CHAR_URL = "https://res.cloudinary.com/du7i7bqna/image/upload/v1763367714/Adobe_Express_-_file_v5et7y.png";
 const BGM_URL = "https://res.cloudinary.com/du7i7bqna/video/upload/v1763367474/retro-arcade-game-music-297305_nae9s4.mp3";
-const GAME_OVER_SFX = "https://res.cloudinary.com/du7i7bqna/video/upload/v1763367570/gameplay-recover-hp-384936_lrpqbk.mp3";
+const GAME_OVER_SFX = "https://res.cloudinary.com/du7i7bqna/video/upload/v1763375766/mkb-aag_3BdJWFa4_vhbrf5.mp3";
 const BG_IMAGE_URL = "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2613&auto=format&fit=crop"; // Realistic City Skyline
 
 export const AmitabFly: React.FC<AmitabFlyProps> = ({ onExit }) => {
